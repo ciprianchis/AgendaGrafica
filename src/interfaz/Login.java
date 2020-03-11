@@ -13,6 +13,8 @@ import com.sun.org.apache.bcel.internal.generic.IF_ACMPEQ;
 import recursos.Contacto;
 
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+
 import java.awt.Font;
 import javax.swing.JTextField;
 import javax.swing.JPasswordField;
@@ -22,6 +24,8 @@ import java.awt.event.FocusEvent;
 import java.util.ArrayList;
 import java.awt.Component;
 import javax.swing.SwingConstants;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 
 public class Login extends JFrame {
 
@@ -33,6 +37,7 @@ public class Login extends JFrame {
 	private JButton btnEntrar;
 	private JLabel lblFondo;
 	private ArrayList<Contacto> vContactos;
+	private JButton btnNuevoUsuaroi;
 
 	/**
 	 * Launch the application.
@@ -94,16 +99,23 @@ public class Login extends JFrame {
 		passwordFieldPass.setFont(new Font("Tahoma", Font.PLAIN, 15));
 		passwordFieldPass.setBounds(211, 70, 140, 30);
 		contentPane.add(passwordFieldPass);
-		passwordFieldPass.setText("CONTASSEÑA");
+		passwordFieldPass.setText("contrase\u00F1a");
 		
 		btnEntrar = new JButton("ENTRAR");
+		btnEntrar.addActionListener(new BtnEntrarActionListener());
 		btnEntrar.setBounds(58, 111, 293, 30);
 		contentPane.add(btnEntrar);
 		
 		lblFondo = new JLabel("");
+		lblFondo.setBackground(new Color(255, 222, 173));
 		lblFondo.setBounds(0, 0, 414, 182);
 		contentPane.add(lblFondo);
 		lblFondo.setFocusable(true);
+		
+		btnNuevoUsuaroi = new JButton("A\u00D1ADIR USUARIO");
+		btnNuevoUsuaroi.addActionListener(new BtnNuevoUsuaroiActionListener());
+		btnNuevoUsuaroi.setBounds(58, 148, 293, 23);
+		contentPane.add(btnNuevoUsuaroi);
 		lblFondo.requestFocus();
 		
 	}
@@ -114,6 +126,7 @@ public class Login extends JFrame {
 		}
 		@Override
 		public void focusLost(FocusEvent arg0) {
+			lblFondo.setFocusable(false);
 			Color gris =  Color.LIGHT_GRAY;
 			Color black =  Color.black;
 			
@@ -134,15 +147,33 @@ public class Login extends JFrame {
 		@Override
 		public void focusGained(FocusEvent arg0) {
 			passwordFieldPass.setText("");
+				
 		}
 		@Override
 		public void focusLost(FocusEvent e) {
-			if (passwordFieldPass.getPassword().equals("")) {
-				passwordFieldPass.setText("CONTRASSEÑA");
+			if (passwordFieldPass.getPassword().toString().equalsIgnoreCase("")) {
+				passwordFieldPass.setText("contraseña");
 			}
-			if (!passwordFieldPass.getPassword().equals("")) {
-				//passwordFieldPass.setText((passwordFieldPass.getPassword()));
+
+		}
+	}
+	private class BtnEntrarActionListener implements ActionListener {
+		public void actionPerformed(ActionEvent arg0) {
+			
+			if (ioDatos.IoDatos.comprobarUser(textFieldUser.getText(), passwordFieldPass.getPassword().toString())==true) {
+				VentanaAgenda a = new VentanaAgenda();
+				a.setVisible(true);
+				dispose();
+			}else {
+				JOptionPane.showMessageDialog(null, "USUARIO O CONTRASEÑA DESCONOCIDOS");
 			}
+		}
+	}
+	private class BtnNuevoUsuaroiActionListener implements ActionListener {
+		public void actionPerformed(ActionEvent e) {
+			NuevoUser ven = new NuevoUser();
+			ven.setVisible(true);
+			dispose();
 		}
 	}
 }
