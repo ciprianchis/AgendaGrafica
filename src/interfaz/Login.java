@@ -62,6 +62,7 @@ public class Login extends JFrame {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 430, 221);
 		contentPane = new JPanel();
+		contentPane.setBackground(Color.CYAN);
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
@@ -151,8 +152,12 @@ public class Login extends JFrame {
 		}
 		@Override
 		public void focusLost(FocusEvent e) {
-			if (passwordFieldPass.getPassword().toString().equalsIgnoreCase("")) {
+			
+			if (passwordFieldPass.getPassword().toString().equals("")) {
 				passwordFieldPass.setText("contraseña");
+			}
+			if ((passwordFieldPass.getPassword().toString().equals("")) && (passwordFieldPass.getPassword().toString().equals("contraseña"))) {
+				passwordFieldPass.setText(passwordFieldPass.getPassword().toString());
 			}
 
 		}

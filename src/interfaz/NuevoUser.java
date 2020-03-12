@@ -7,13 +7,20 @@ import java.awt.EventQueue;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
+
+import ioDatos.IoDatos;
+import sun.util.logging.resources.logging;
+
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.SwingConstants;
 import java.awt.Font;
 import javax.swing.JTextField;
 import javax.swing.JButton;
 import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 
 public class NuevoUser extends JFrame {
 
@@ -47,6 +54,7 @@ public class NuevoUser extends JFrame {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 280, 275);
 		contentPane = new JPanel();
+		contentPane.setBackground(Color.CYAN);
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
@@ -57,6 +65,7 @@ public class NuevoUser extends JFrame {
 		lblAñadirUser.setBounds(10, 11, 244, 30);
 		contentPane.add(lblAñadirUser);
 		
+		
 		textFieldUser = new JTextField();
 		textFieldUser.addFocusListener(new TextFieldUserFocusListener());
 		textFieldUser.setHorizontalAlignment(SwingConstants.CENTER);
@@ -64,6 +73,7 @@ public class NuevoUser extends JFrame {
 		textFieldUser.setBounds(57, 54, 150, 30);
 		contentPane.add(textFieldUser);
 		textFieldUser.setColumns(10);
+		textFieldUser.setText("USUARIO");
 		
 		textFieldContras = new JTextField();
 		textFieldContras.addFocusListener(new TextFieldContrasFocusListener());
@@ -72,8 +82,10 @@ public class NuevoUser extends JFrame {
 		textFieldContras.setBounds(57, 109, 150, 30);
 		contentPane.add(textFieldContras);
 		textFieldContras.setColumns(10);
+		textFieldContras.setText("CONTRASEÑA");
 		
 		btnAñadir = new JButton("A\u00D1ADIR");
+		btnAñadir.addActionListener(new BtnAñadirActionListener());
 		btnAñadir.setFont(new Font("Tahoma", Font.PLAIN, 15));
 		btnAñadir.setBounds(57, 165, 150, 30);
 		contentPane.add(btnAñadir);
@@ -95,8 +107,8 @@ public class NuevoUser extends JFrame {
 		public void focusLost(FocusEvent e) {
 			Color gris =  Color.LIGHT_GRAY;
 			Color black =  Color.black;
-			if (textFieldUser.getText().equalsIgnoreCase("")) {
-				textFieldContras.setText("USUARIO");
+			if (textFieldUser.getText().equals("")) {
+				textFieldUser.setText("USUARIO");
 				textFieldUser.setCaretColor(gris);
 			}
 			if (!textFieldUser.getText().equalsIgnoreCase("")) {
@@ -108,6 +120,30 @@ public class NuevoUser extends JFrame {
 	private class TextFieldContrasFocusListener extends FocusAdapter {
 		@Override
 		public void focusGained(FocusEvent arg0) {
+			textFieldContras.setText("");
+		}
+		@Override
+		public void focusLost(FocusEvent e) {
+			if (textFieldContras.getText().equals("")) {
+				textFieldContras.setText("CONTRASEÑA");
+				
+			}
+			if (!textFieldContras.getText().equals("")) {
+				textFieldContras.setText(textFieldContras.getText());
+			}
+		}
+	}
+	private class BtnAñadirActionListener implements ActionListener {
+		public void actionPerformed(ActionEvent arg0) {
+			
+			IoDatos.guardarUsuario(textFieldUser.getText(), textFieldContras.getText());
+			
+			Login login = new Login();
+			login.setVisible(true);
+			dispose();
+			
+			JOptionPane.showMessageDialog(null, "Usuario creado");
+			
 		}
 	}
 }
